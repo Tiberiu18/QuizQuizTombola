@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const quizSchema = mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
-    timeLimit: { type: Number, required: true },
+    timeLimit: { type: Number, required: false, default: 180 },
+
     
     // Referință la întrebările din QuestionModel
     questions: [

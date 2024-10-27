@@ -6,10 +6,11 @@ import ImportData from "./DataImport.js";
 import { errorHandler, notFound } from "./Middleware/Errors.js";
 import userRouter from "./Routes/UserRoutes.js";
 import orderRouter from "./Routes/orderRoutes.js";
-import quizRouter from './Routes/quizRoutes.js';
-import competitionRouter from './Routes/competitionRoutes.js';
-import resultsRouter from './Routes/resultsRoutes.js';
-import leaderboardRouter from './Routes/leaderboardRoutes.js';
+import quizRouter from "./Routes/quizRoutes.js";
+import competitionRouter from "./Routes/competitionRoutes.js";
+import resultsRouter from "./Routes/resultsRoutes.js";
+import leaderboardRouter from "./Routes/leaderboardRoutes.js";
+import questionRouter from "./Routes/questionRoutes.js";
 
 dotenv.config();
 connectDatabase();
@@ -34,6 +35,10 @@ app.use("/api/results", resultsRouter);
 
 // API pentru leaderboard
 app.use("/api/leaderboard", leaderboardRouter);
+
+
+// API pentru questions
+app.use("/api/questions", questionRouter);
 
 
 // err handler

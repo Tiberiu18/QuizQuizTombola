@@ -6,11 +6,12 @@ const competitionSchema = mongoose.Schema({
     targetParticipants: { type: Number, required: true },
     currentParticipants: { type: Number, default: 0 },
     endDate: { type: Date, required: true },
-    prize: { type: String, required: true },
+    prize: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, // Referință către modelul Product
     winnerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-}, {
-    timestamps: true // pentru a avea campurile createdAt și updatedAt
-});
+  }, {
+    timestamps: true
+  });
+  
+  const Competition = mongoose.model('Competition', competitionSchema);
 
-const Competition = mongoose.model('Competition', competitionSchema);
-export default Competition;
+  export default Competition;

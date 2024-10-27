@@ -25,18 +25,18 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: "Eroare la obținerea competiției" });
     }
 });
-
 // Creează o competiție nouă (acces doar pentru admin)
 router.post('/', async (req, res) => {
     try {
-        const { title, quizId, targetParticipants, endDate, prize } = req.body;
+        const { title, quizId, targetParticipants, endDate, prizeId } = req.body;
 
+        // Creează competiția cu referință la produsul 'prizeId'
         const competition = new Competition({
             title,
             quizId,
             targetParticipants,
             endDate,
-            prize
+            prize: prizeId // prize este acum un ObjectId care face referință la Product
         });
 
         const createdCompetition = await competition.save();
@@ -45,5 +45,6 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: "Eroare la crearea competiției" });
     }
 });
+
 
 export default router;

@@ -2,10 +2,13 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-
-    password: {type: String, required: true},
+    userName: {type: String, required: true, unique:true },
+    firstName: { type: String, required: true },   // Prenume
+    lastName: { type: String, required: true },    // Nume
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phoneNumber: { type: String, required: true, unique: true }, // Număr de telefon
+    dateOfBirth: { type: Date, required: true },   // Data de naștere
     isAdmin: {type: Boolean, required: true, default: false},
     sex: {type: String, required: true},
 

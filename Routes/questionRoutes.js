@@ -1,9 +1,11 @@
 import express from 'express';
 import Question from '../Models/QuestionModel.js';  // Importă modelul întrebărilor
-const router = express.Router();
+import fs from 'fs';
+import path from 'path';
+const questionRouter = express.Router();
 
 // Adaugă o nouă întrebare (POST /api/questions)
-router.post('/', async (req, res) => {
+questionRouter.post('/', async (req, res) => {
     try {
         const { question, options, correctAnswer } = req.body;
 
@@ -16,12 +18,13 @@ router.post('/', async (req, res) => {
         const savedQuestion = await newQuestion.save();
         res.status(201).json(savedQuestion);  // Cod 201 pentru resursa creată
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Eroare la adăugarea întrebării" });
     }
 });
 
 // Obține toate întrebările (GET /api/questions)
-router.get('/', async (req, res) => {
+questionRouter.get('/', async (req, res) => {
     try {
         const questions = await Question.find({});
         res.json(questions);
@@ -31,7 +34,7 @@ router.get('/', async (req, res) => {
 });
 
 // Obține o întrebare specifică după ID (GET /api/questions/:id)
-router.get('/:id', async (req, res) => {
+questionRouter.get('/:id', async (req, res) => {
     try {
         const question = await Question.findById(req.params.id);
         if (question) {
@@ -45,7 +48,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Modifică o întrebare existentă (PUT /api/questions/:id)
-router.put('/:id', async (req, res) => {
+questionRouter.put('/:id', async (req, res) => {
     try {
         const { question, options, correctAnswer } = req.body;
 
@@ -66,7 +69,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Șterge o întrebare (DELETE /api/questions/:id)
-router.delete('/:id', async (req, res) => {
+questionRouter.delete('/:id', async (req, res) => {
     try {
         const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
         if (deletedQuestion) {
@@ -79,4 +82,26 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-export default router;
+// Ruta pentru a adăuga întrebările dintr-un fișier JSON
+questionRouter.post('/addQuestionsFromFile', async (req, res) => {
+    try {
+        const filePath = path.join(process.cwd(), 'data/questions.json');
+
+        // Citește conținutul fișierului JSON
+        const data = fs.readFileSync(filePath, 'utf8');
+        
+        
+      // Parsează fișierul JSON
+      const questions = JSON.parse(data);
+  
+      // Inserează toate întrebările în baza de date
+      await Question.insertMany(questions);
+  
+      res.status(201).json({ message: 'Questions added successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to add questions' });
+    }
+  });
+
+export default questionRouter;
